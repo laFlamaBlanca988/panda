@@ -1,10 +1,9 @@
 // components/builder/FormBuilderView.tsx
-import { VStack, HStack, Box, Text } from "@/styled-system/jsx";
 import { useFormStore } from "@/store/formStore";
 import type { FieldType } from "@/types/form";
-import { Button } from "@/components/ui/Button";
-import { FieldEditor } from "./FieldEditor";
-import { FieldList } from "./FieldList";
+import { FieldList } from "../builder/FieldList";
+import Button from "../ui/Button";
+// import { FieldEditor } from "./FieldEditor";
 
 export const FormBuilderView = () => {
   const addField = useFormStore((s) => s.addField);
@@ -12,19 +11,16 @@ export const FormBuilderView = () => {
   const handleAdd = (type: FieldType) => () => addField(type);
 
   return (
-    <VStack gap="6" align="start">
-      <Text fontSize="xl" fontWeight="semibold">
-        🛠 Dodaj polja
-      </Text>
-      <HStack gap="3">
+    <div>
+      <div>
         <Button onClick={handleAdd("text")}>+ Text</Button>
         <Button onClick={handleAdd("checkbox")}>+ Checkbox</Button>
         <Button onClick={handleAdd("select")}>+ Select</Button>
-      </HStack>
+      </div>
 
-      <Box width="full">
+      <div>
         <FieldList />
-      </Box>
-    </VStack>
+      </div>
+    </div>
   );
 };

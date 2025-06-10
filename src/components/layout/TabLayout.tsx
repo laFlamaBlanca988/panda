@@ -1,7 +1,7 @@
 // components/layout/TabLayout.tsx
 import { useUIStore } from "@/store/uiStore";
-import { FormBuilderView } from "@/components/builder/FormBuilderView";
 import { LivePreviewView } from "@/components/preview/LivePreviewView";
+import { FormBuilderView } from "../preview/FormBuilderView";
 
 export const TabLayout = () => {
   const { activeTab, setTab } = useUIStore();

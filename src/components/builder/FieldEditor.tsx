@@ -5,7 +5,7 @@ import type { FormField } from "../../types/form";
 import { useFormStore } from "../../store/formStore";
 import { FieldWrapper } from "@/components/ui/FieldWrapper";
 import { Button } from "@/components/ui/Button";
-import { HStack, VStack, Input, Text, Checkbox } from "../../styled-system/jsx";
+import { HStack, VStack, Input, Text, Checkbox } from "@/styled-system/jsx";
 
 interface Props {
   field: FormField;
@@ -41,7 +41,9 @@ export const FieldEditor = ({ field }: Props) => {
           <Input
             type="text"
             value={field.placeholder}
-            onChange={(e) => handleUpdate({ placeholder: e.target.value })}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleUpdate({ label: e.target.value })
+            }
             placeholder="Placeholder"
           />
         )}

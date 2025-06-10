@@ -7,17 +7,16 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import {
-  arrayMove,
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useFormStore } from "@/store/formStore";
 import { SortableField } from "./SortableField";
-import { useUiStore } from "@/store/uiStore";
+import { useUIStore } from "@/store/uiStore";
 
 export const FieldList = () => {
   const { fields, moveField, deleteField } = useFormStore();
-  const { setSelectedFieldId } = useUiStore();
+  const { setSelectedFieldId } = useUIStore();
 
   const sensors = useSensors(
     useSensor(MouseSensor, {

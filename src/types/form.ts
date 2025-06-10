@@ -12,15 +12,19 @@ export interface BaseField {
 export interface TextField extends BaseField {
   type: "text";
   placeholder: string;
+  value: string;
 }
 
 export interface CheckboxField extends BaseField {
   type: "checkbox";
+  value: boolean;
 }
 
 export interface SelectField extends BaseField {
   type: "select";
   options: string[];
+  value: string;
+  placeholder: string;
 }
 
 export type FormField = TextField | CheckboxField | SelectField;

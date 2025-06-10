@@ -1,23 +1,25 @@
-import { styled } from "@/styled-system/css";
+import { styled } from "../../../styled-system/jsx";
 
-export const Button = styled("button", {
+const StyledButton = styled("button", {
   base: {
-    px: "4",
-    py: "2",
-    borderRadius: "md",
+    bg: "brand.100",
+    color: "red.800",
+    px: 4,
+    py: 2,
+    rounded: "md",
     fontWeight: "semibold",
-    bg: "blue.500",
-    color: "white",
     _hover: {
-      bg: "blue.600",
+      bg: "brand.600",
     },
-    _active: {
-      bg: "blue.700",
-    },
-    _disabled: {
-      bg: "gray.300",
-      cursor: "not-allowed",
-    },
-    transition: "all 0.2s ease-in-out",
   },
 });
+
+export default function Button({
+  onClick,
+  children,
+}: {
+  onClick?: () => void;
+  children: React.ReactNode;
+}) {
+  return <StyledButton onClick={onClick}>{children}</StyledButton>;
+}
