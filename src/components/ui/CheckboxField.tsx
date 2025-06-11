@@ -7,18 +7,45 @@ interface CheckboxFieldProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label: string;
   required?: boolean;
+  error?: string;
 }
+
+const StyledLabel = styled("label", {
+  base: {
+    display: "flex",
+    gap: 3,
+    alignItems: "center",
+    cursor: "pointer",
+    color: "gray.700",
+  },
+});
 
 const StyledCheckbox = styled("input", {
   base: {
     w: 4,
     h: 4,
     rounded: "sm",
-    border: "1px solid token(colors.gray.300)",
+    border: "1px solid token(colors.inputBorder)",
+    cursor: "pointer",
+    accentColor: "primary.500",
     _checked: {
-      bg: "brand.500",
-      borderColor: "brand.500",
+      bg: "primary.500",
+      borderColor: "primary.500",
     },
+    _focus: {
+      boxShadow: "0 0 0 2px token(colors.primary.100)",
+    },
+  },
+  variants: {
+    state: {
+      default: {},
+      error: {
+        borderColor: "error.500",
+      },
+    },
+  },
+  defaultVariants: {
+    state: "default",
   },
 });
 
@@ -28,20 +55,38 @@ export function CheckboxField({
   onChange,
   label,
   required,
+  error,
 }: CheckboxFieldProps) {
   return (
-    <label
-      htmlFor={id}
-      style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}
-    >
-      <StyledCheckbox
-        id={id}
-        type="checkbox"
-        checked={checked}
-        onChange={onChange}
-        required={required}
-      />
-      {label}
-    </label>
+    <div>
+      <StyledLabel htmlFor={id}>
+        <StyledCheckbox
+          id={id}
+          type="checkbox"
+          checked={checked}
+          onChange={onChange}
+          required={required}
+          state={error ? "error" : "default"}
+        />
+        {label}
+        {required && (
+          <span
+            style={{ color: "var(--colors-error-500)", marginLeft: "4px" }}
+          ></span>
+        )}
+      </StyledLabel>
+      {error && (
+        <div
+          style={{
+            color: "var(--colors-error-500)",
+            fontSize: "14px",
+            marginTop: "4px",
+            marginLeft: "24px",
+          }}
+        >
+          {error}
+        </div>
+      )}
+    </div>
   );
 }

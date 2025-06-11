@@ -1,18 +1,51 @@
 import { styled } from "../../../styled-system/jsx";
 import React from "react";
 
+const StyledLabel = styled("label", {
+  base: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
+    fontSize: "sm",
+    fontWeight: "medium",
+    color: "gray.700",
+  },
+});
+
 const StyledInput = styled("input", {
   base: {
     px: 3,
     py: 2,
-    border: "1px solid token(colors.gray.300)",
+    border: "1px solid token(colors.inputBorder)",
     rounded: "md",
     fontSize: "md",
     outline: "none",
-    _focus: {
-      borderColor: "brand.500",
-      boxShadow: "0 0 0 1px token(colors.brand.500)",
+    transition: "all 0.2s",
+    _placeholder: {
+      color: "gray.400",
     },
+    _focus: {
+      borderColor: "inputBorderFocus",
+      boxShadow: "0 0 0 1px token(colors.primary.500)",
+    },
+    _disabled: {
+      bg: "gray.100",
+      cursor: "not-allowed",
+    },
+  },
+  variants: {
+    state: {
+      default: {},
+      error: {
+        borderColor: "error.500",
+        _focus: {
+          boxShadow: "0 0 0 1px token(colors.error.500)",
+        },
+      },
+    },
+  },
+  defaultVariants: {
+    state: "default",
   },
 });
 
@@ -22,6 +55,7 @@ interface TextFieldProps {
   label: string;
   required?: boolean;
   placeholder?: string;
+  error?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -31,22 +65,39 @@ export function TextField({
   label,
   required,
   placeholder,
+  error,
   onChange,
 }: TextFieldProps) {
   return (
-    <label
-      htmlFor={id}
-      style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}
-    >
-      {label}
-      <StyledInput
-        id={id}
-        type="text"
-        value={value}
-        required={required}
-        placeholder={placeholder}
-        onChange={onChange}
-      />
-    </label>
+    <div>
+      <StyledLabel htmlFor={id}>
+        {label}
+        {required && (
+          <span style={{ color: "var(--colors-error-500)", marginLeft: "4px" }}>
+            *
+          </span>
+        )}
+        <StyledInput
+          id={id}
+          type="text"
+          value={value}
+          required={required}
+          placeholder={placeholder}
+          onChange={onChange}
+          state={error ? "error" : "default"}
+        />
+      </StyledLabel>
+      {error && (
+        <div
+          style={{
+            color: "var(--colors-error-500)",
+            fontSize: "14px",
+            marginTop: "4px",
+          }}
+        >
+          {error}
+        </div>
+      )}
+    </div>
   );
 }

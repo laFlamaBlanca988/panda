@@ -1,90 +1,179 @@
+// src/components/builder/SortableField.tsx
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { FormField } from "@/types/form";
-import Button from "../ui/Button";
-import { useFormStore } from "@/store/formStore";
-import { TextField } from "../ui/TextField";
-import { CheckboxField } from "../ui/CheckboxField";
-import { SelectField } from "../ui/SelectField";
-interface Props {
+import { styled } from "styled-system/jsx";
+import { useUIStore } from "@/store/uiStore";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { FaGripVertical } from "react-icons/fa6";
+
+interface SortableFieldProps {
   field: FormField;
   onEdit: () => void;
   onDelete: () => void;
 }
 
-export const SortableField = ({ field, onEdit, onDelete }: Props) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: field.id });
+const FieldCard = styled("div", {
+  base: {
+    display: "flex",
+    alignItems: "center",
+    p: 3,
+    mb: 2,
+    border: "1px solid",
+    borderColor: "border",
+    borderRadius: "md",
+    bg: "white",
+    transition: "all 0.2s ease",
+    _hover: {
+      borderColor: "primary.300",
+    },
+  },
+  variants: {
+    selected: {
+      true: {
+        borderColor: "primary.500",
+        borderWidth: "2px",
+        bg: "primary.50",
+        boxShadow: "0 0 0 1px token(colors.primary.300)",
+      },
+    },
+    dragging: {
+      true: {
+        opacity: 0.5,
+        bg: "gray.50",
+      },
+    },
+  },
+});
 
-  const updateField = useFormStore((state) => state.updateField);
+const DragHandle = styled("div", {
+  base: {
+    display: "flex",
+    alignItems: "center",
+    cursor: "grab",
+    color: "gray.400",
+    marginRight: 3,
+    _hover: {
+      color: "gray.600",
+    },
+  },
+});
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateField(field.id, { value: e.target.value });
-  };
+const FieldContent = styled("div", {
+  base: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+  },
+});
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateField(field.id, { value: e.target.checked });
-  };
+const FieldLabel = styled("div", {
+  base: {
+    fontWeight: "medium",
+  },
+});
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    updateField(field.id, { value: e.target.value });
-  };
+const FieldType = styled("div", {
+  base: {
+    fontSize: "xs",
+    color: "gray.500",
+    mt: 0.5,
+  },
+});
 
-  const displayPreview = () => {
-    switch (field.type) {
-      case "text":
-        return (
-          <TextField
-            id={field.id}
-            value={field.value}
-            label={field.label}
-            placeholder={field.placeholder}
-            onChange={handleTextChange}
-            required={field.required}
-          />
-        );
-      case "checkbox":
-        return (
-          <CheckboxField
-            id={field.id}
-            checked={field.value}
-            label={field.label}
-            onChange={handleCheckboxChange}
-            required={field.required}
-          />
-        );
-      case "select":
-        return (
-          <SelectField
-            id={field.id}
-            value={field.value}
-            label={field.label}
-            onChange={handleSelectChange}
-            placeholder={field.placeholder}
-            options={field.options}
-            required={field.required}
-          />
-        );
-    }
+const ActionButtons = styled("div", {
+  base: {
+    display: "flex",
+    gap: 2,
+  },
+});
+
+const IconButton = styled("button", {
+  base: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    p: 2,
+    border: "none",
+    bg: "transparent",
+    borderRadius: "md",
+    cursor: "pointer",
+    color: "gray.500",
+    transition: "all 0.2s",
+    _hover: {
+      bg: "gray.100",
+      color: "gray.700",
+    },
+  },
+  variants: {
+    danger: {
+      true: {
+        _hover: {
+          bg: "error.50",
+          color: "error.600",
+        },
+      },
+    },
+  },
+});
+
+export function SortableField({ field, onEdit, onDelete }: SortableFieldProps) {
+  const { selectedFieldId } = useUIStore();
+  const isSelected = selectedFieldId === field.id;
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: field.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
   };
 
   return (
-    <div
+    <FieldCard
       ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
-      {...attributes}
-      {...listeners}
-      className="border p-2 rounded mb-2 bg-white cursor-move"
+      style={style}
+      selected={isSelected}
+      dragging={isDragging}
+      onClick={onEdit} // Make the entire card clickable for better UX
     >
-      <div className="mb-2">
-        <strong>{field.label || "Untitled"}</strong>{" "}
-        <span className="text-sm text-gray.500">({field.type})</span>
-      </div>
-      <div className="mb-2">{displayPreview()}</div>
-      <div className="flex gap-2">
-        <Button onClick={onEdit}>Edit</Button>
-        <Button onClick={onDelete}>Delete</Button>
-      </div>
-    </div>
+      <DragHandle {...attributes} {...listeners}>
+        <FaGripVertical size={20} />
+      </DragHandle>
+
+      <FieldContent>
+        <FieldLabel>{field.label || `Untitled ${field.type} field`}</FieldLabel>
+        <FieldType>
+          {field.type.charAt(0).toUpperCase() + field.type.slice(1)}
+          {field.required && " (Required)"}
+        </FieldType>
+      </FieldContent>
+
+      <ActionButtons>
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit();
+          }}
+        >
+          <FiEdit size={18} />
+        </IconButton>
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+          danger
+        >
+          <FiTrash2 size={18} />
+        </IconButton>
+      </ActionButtons>
+    </FieldCard>
   );
-};
+}
