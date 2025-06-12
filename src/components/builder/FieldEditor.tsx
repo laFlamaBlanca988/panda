@@ -1,11 +1,11 @@
-// src/components/builder/FieldEditor.tsx
 import type { FormField } from "@/types/form";
 import { useFormStore } from "@/store/formStore";
 import { FieldWrapper } from "@/components/ui/FieldWrapper";
-import Button from "@/components/ui/Button";
 import { TextField } from "@/components/ui/TextField";
 import { CheckboxField } from "@/components/ui/CheckboxField";
 import { styled } from "styled-system/jsx";
+import { FiType, FiCheckSquare, FiList, FiAlertTriangle } from "react-icons/fi";
+import { motion } from "framer-motion";
 
 const EditorContainer = styled("div", {
   base: {
@@ -16,21 +16,17 @@ const EditorContainer = styled("div", {
   },
 });
 
-const FieldTypeIndicator = styled("div", {
-  base: {
-    fontSize: "sm",
-    color: "gray.500",
-    marginBottom: "2",
-  },
-});
-
-const ActionsContainer = styled("div", {
+const FieldTypeHeader = styled("div", {
   base: {
     display: "flex",
-    justifyContent: "space-between",
     alignItems: "center",
-    marginTop: "4",
-    width: "100%",
+    gap: 2,
+    marginBottom: 4,
+    padding: 2,
+    borderRadius: "md",
+    backgroundColor: "primary.50",
+    color: "primary.600",
+    fontWeight: "medium",
   },
 });
 
@@ -40,14 +36,37 @@ interface Props {
 
 export const FieldEditor = ({ field }: Props) => {
   const updateField = useFormStore((s) => s.updateField);
-  const deleteField = useFormStore((s) => s.deleteField);
 
   const handleUpdate = (updates: Partial<FormField>) => {
     updateField(field.id, updates);
   };
 
+  const getFieldIcon = () => {
+    switch (field.type) {
+      case "text":
+        return <FiType size={20} />;
+      case "checkbox":
+        return <FiCheckSquare size={20} />;
+      case "select":
+        return <FiList size={20} />;
+      default:
+        return <FiAlertTriangle size={20} />;
+    }
+  };
+
   return (
     <FieldWrapper>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <FieldTypeHeader>
+          {getFieldIcon()}
+          {field.type.charAt(0).toUpperCase() + field.type.slice(1)} Field
+        </FieldTypeHeader>
+      </motion.div>
+
       <EditorContainer>
         <TextField
           id={`field-label-${field.id}`}
@@ -75,15 +94,6 @@ export const FieldEditor = ({ field }: Props) => {
           />
         )}
 
-        {field.type === "checkbox" && (
-          <CheckboxField
-            id={`field-default-${field.id}`}
-            label="Default Value"
-            checked={field.value}
-            onChange={(e) => handleUpdate({ value: e.target.checked })}
-          />
-        )}
-
         {field.type === "select" && (
           <TextField
             id={`field-options-${field.id}`}
@@ -97,11 +107,6 @@ export const FieldEditor = ({ field }: Props) => {
             placeholder="Option 1, Option 2, Option 3"
           />
         )}
-
-        <ActionsContainer>
-          <FieldTypeIndicator>Type: {field.type}</FieldTypeIndicator>
-          <Button onClick={() => deleteField(field.id)}>Delete</Button>
-        </ActionsContainer>
       </EditorContainer>
     </FieldWrapper>
   );

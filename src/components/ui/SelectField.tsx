@@ -1,5 +1,6 @@
 import { styled } from "../../../styled-system/jsx";
 import React from "react";
+import { Box } from "styled-system/jsx";
 
 const StyledLabel = styled("label", {
   base: {
@@ -77,7 +78,7 @@ export function SelectField({
   error,
 }: SelectInputProps) {
   return (
-    <div>
+    <Box css={{ width: "100%" }}>
       <StyledLabel htmlFor={id}>
         {label}
         {required && (
@@ -115,6 +116,6 @@ export function SelectField({
           {error}
         </div>
       )}
-    </div>
+    </Box>
   );
 }

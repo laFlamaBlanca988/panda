@@ -4,7 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import type { FormField } from "@/types/form";
 import { styled } from "styled-system/jsx";
 import { useUIStore } from "@/store/uiStore";
-import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 import { FaGripVertical } from "react-icons/fa6";
 
 interface SortableFieldProps {
@@ -62,6 +62,7 @@ const DragHandle = styled("div", {
 const FieldContent = styled("div", {
   base: {
     flex: 1,
+    color: "gray.700",
     display: "flex",
     flexDirection: "column",
   },
@@ -78,13 +79,6 @@ const FieldType = styled("div", {
     fontSize: "xs",
     color: "gray.500",
     mt: 0.5,
-  },
-});
-
-const ActionButtons = styled("div", {
-  base: {
-    display: "flex",
-    gap: 2,
   },
 });
 
@@ -155,25 +149,15 @@ export function SortableField({ field, onEdit, onDelete }: SortableFieldProps) {
         </FieldType>
       </FieldContent>
 
-      <ActionButtons>
-        <IconButton
-          onClick={(e) => {
-            e.stopPropagation();
-            onEdit();
-          }}
-        >
-          <FiEdit size={18} />
-        </IconButton>
-        <IconButton
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete();
-          }}
-          danger
-        >
-          <FiTrash2 size={18} />
-        </IconButton>
-      </ActionButtons>
+      <IconButton
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete();
+        }}
+        danger
+      >
+        <FiTrash2 size={18} />
+      </IconButton>
     </FieldCard>
   );
 }

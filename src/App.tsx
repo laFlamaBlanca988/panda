@@ -18,6 +18,8 @@ function App() {
           justifyContent: "space-between",
           gap: "2rem",
           padding: "1rem",
+          maxWidth: "1440px",
+          marginX: "auto",
         }}
       >
         <Flex css={{ width: "50%", justifyContent: "center" }}>

@@ -1,4 +1,4 @@
-import { styled } from "../../../styled-system/jsx";
+import { Box, styled } from "styled-system/jsx";
 import React from "react";
 
 const StyledLabel = styled("label", {
@@ -69,7 +69,7 @@ export function TextField({
   onChange,
 }: TextFieldProps) {
   return (
-    <div>
+    <Box css={{ width: "100%" }}>
       <StyledLabel htmlFor={id}>
         {label}
         {required && (
@@ -98,6 +98,6 @@ export function TextField({
           {error}
         </div>
       )}
-    </div>
+    </Box>
   );
 }

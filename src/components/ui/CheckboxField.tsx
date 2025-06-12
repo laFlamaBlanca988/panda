@@ -1,4 +1,4 @@
-import { styled } from "../../../styled-system/jsx";
+import { styled, Box } from "styled-system/jsx";
 import React from "react";
 
 interface CheckboxFieldProps {
@@ -58,7 +58,7 @@ export function CheckboxField({
   error,
 }: CheckboxFieldProps) {
   return (
-    <div>
+    <Box>
       <StyledLabel htmlFor={id}>
         <StyledCheckbox
           id={id}
@@ -87,6 +87,6 @@ export function CheckboxField({
           {error}
         </div>
       )}
-    </div>
+    </Box>
   );
 }
