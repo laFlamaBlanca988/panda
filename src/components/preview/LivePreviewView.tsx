@@ -74,20 +74,32 @@ export const LivePreviewView = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [hasErrors, setHasErrors] = useState(false);
 
+  const validateField = (
+    id: string,
+    value: string | boolean,
+    required: boolean
+  ) => {
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      if (required && !value) {
+        newErrors[id] = true;
+      } else {
+        delete newErrors[id];
+      }
+      return newErrors;
+    });
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitted(false);
     setHasErrors(false);
 
     const newErrors: Record<string, boolean> = {};
+
     fields.forEach((field) => {
-      if (field.required) {
-        const inputField = document.querySelector(
-          `input[name="${field.id}"]`
-        ) as HTMLInputElement;
-        if (!inputField || !inputField.value) {
-          newErrors[field.id] = true;
-        }
+      if (field.required && !field.value) {
+        newErrors[field.id] = true;
       }
     });
 
@@ -134,7 +146,11 @@ export const LivePreviewView = () => {
                   transition={{ duration: 0.3 }}
                   layout
                 >
-                  <FormFieldRenderer field={field} errors={errors} />
+                  <FormFieldRenderer
+                    field={field}
+                    errors={errors}
+                    validateField={validateField}
+                  />
                 </motion.div>
               </FieldContainer>
             ))}

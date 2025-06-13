@@ -4,18 +4,23 @@ import { VStack } from "../../../styled-system/jsx";
 import { TextField } from "../ui/TextField";
 import { CheckboxField } from "../ui/CheckboxField";
 import { SelectField } from "../ui/SelectField";
-import TextSpan from "../ui/TextSpan";
 
 interface Props {
   field: FormField;
   errors: Record<string, boolean>;
+  validateField: (
+    id: string,
+    value: string | boolean,
+    required: boolean
+  ) => void;
 }
 
-export const FormFieldRenderer = ({ field, errors }: Props) => {
+export const FormFieldRenderer = ({ field, errors, validateField }: Props) => {
   const updateField = useFormStore((state) => state.updateField);
 
   const handleChange = (value: string | boolean) => {
     updateField(field.id, { value });
+    validateField(field.id, value, field.required);
   };
 
   return (
@@ -28,6 +33,7 @@ export const FormFieldRenderer = ({ field, errors }: Props) => {
           required={field.required}
           placeholder={field.placeholder}
           onChange={(e) => handleChange(e.target.value)}
+          error={errors[field.id] ? "This field is required" : undefined}
         />
       )}
 
@@ -37,7 +43,7 @@ export const FormFieldRenderer = ({ field, errors }: Props) => {
           checked={Boolean(field.value)}
           onChange={(e) => handleChange(e.target.checked)}
           label={field.label}
-          required={field.required}
+          error={errors[field.id] ? "This field is required" : undefined}
         />
       )}
 
@@ -47,14 +53,10 @@ export const FormFieldRenderer = ({ field, errors }: Props) => {
           label={field.label}
           options={field.options}
           placeholder={field.placeholder}
-          required={field.required}
           value={field.value as string}
           onChange={(e) => handleChange(e.target.value)}
+          error={errors[field.id] ? "This field is required" : undefined}
         />
-      )}
-
-      {errors[field.id] && (
-        <TextSpan color="error">This field is required</TextSpan>
       )}
     </VStack>
   );
