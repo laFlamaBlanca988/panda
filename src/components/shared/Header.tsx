@@ -1,19 +1,20 @@
-// src/components/shared/Header.tsx
 import { useRef, useState } from "react";
 import { useFormStore } from "@/store/formStore";
 import { toast } from "react-toastify";
 import * as Dialog from "@radix-ui/react-dialog";
 import { FiSave, FiUpload, FiX, FiCode } from "react-icons/fi";
-import { BiUndo, BiRedo } from "react-icons/bi";
-import { Box, Flex } from "../../../styled-system/jsx";
+import { BiUndo, BiRedo, BiReset } from "react-icons/bi";
+import { Box, Flex } from "styled-system/jsx";
 import Button from "@/components/ui/Button";
 import { H1 } from "../ui/Heading";
 
 export const Header = () => {
-  const { exportFields, importFields, undo, redo } = useFormStore();
+  const { fields, exportFields, importFields, undo, redo, reset } =
+    useFormStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [exportedJson, setExportedJson] = useState("");
+  const exportIsDisabled = fields.length === 0;
 
   const handleImportClick = () => {
     if (fileInputRef.current) {
@@ -39,7 +40,6 @@ export const Header = () => {
       }
     };
     reader.readAsText(file);
-    // Reset the input
     event.target.value = "";
   };
 
@@ -87,6 +87,9 @@ export const Header = () => {
         <H1>Form Builder</H1>
 
         <Flex gap="3">
+          <Button onClick={reset}>
+            <BiReset /> Reset
+          </Button>
           <Button onClick={undo}>
             <BiUndo /> Undo
           </Button>
@@ -103,13 +106,12 @@ export const Header = () => {
             style={{ display: "none" }}
             onChange={handleFileChange}
           />
-          <Button onClick={handleExport}>
-            <FiSave /> Export Export
+          <Button disabled={exportIsDisabled} onClick={handleExport}>
+            <FiSave /> Export
           </Button>
         </Flex>
       </Flex>
 
-      {/* Export Dialog */}
       <Dialog.Root open={isExportOpen} onOpenChange={setIsExportOpen}>
         <Dialog.Portal>
           <Dialog.Overlay
@@ -125,6 +127,7 @@ export const Header = () => {
               backgroundColor: "white",
               borderRadius: "6px",
               boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
+              color: "black",
               position: "fixed",
               top: "50%",
               left: "50%",
@@ -163,14 +166,14 @@ export const Header = () => {
 
             <Flex gap="3" justify="flex-end">
               <Button onClick={copyToClipboard}>
-                <FiCode /> Copy JSON Copy JSON
+                <FiCode /> Copy JSON
               </Button>
               <Button onClick={handleDownload}>
-                <FiSave /> Download Download
+                <FiSave /> Download
               </Button>
               <Dialog.Close asChild>
                 <Button>
-                  <FiX /> Close Close
+                  <FiX /> Close
                 </Button>
               </Dialog.Close>
             </Flex>

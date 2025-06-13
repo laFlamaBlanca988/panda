@@ -1,7 +1,6 @@
 import { styled } from "../../../styled-system/jsx";
 import type { ReactNode } from "react";
 
-// Create variants for different button types
 const StyledButton = styled("button", {
   base: {
     px: 4,
@@ -14,6 +13,11 @@ const StyledButton = styled("button", {
     alignItems: "center",
     justifyContent: "center",
     gap: 2,
+    _disabled: {
+      cursor: "not-allowed",
+      opacity: 0.8,
+      pointerEvents: "none",
+    },
   },
   variants: {
     variant: {

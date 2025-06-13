@@ -59,6 +59,7 @@ const ScrollableArea = styled("div", {
     overflowY: "auto",
     py: 4,
     flexGrow: 1,
+    overflowX: "hidden",
   },
 });
 

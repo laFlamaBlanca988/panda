@@ -1,14 +1,13 @@
+import { Box, styled } from "styled-system/jsx";
 import React from "react";
-import { styled } from "styled-system/jsx";
 
 const StyledLabel = styled("label", {
   base: {
     display: "flex",
     flexDirection: "column",
-    gap: 2,
-    fontSize: "sm",
     fontWeight: "medium",
     color: "gray.700",
+    gap: 1,
   },
 });
 
@@ -69,7 +68,7 @@ export function TextField({
   onChange,
 }: TextFieldProps) {
   return (
-    <>
+    <Box css={{ width: "100%" }}>
       <StyledLabel htmlFor={id}>
         {label}
         {required && (
@@ -97,6 +96,6 @@ export function TextField({
           {error}
         </div>
       )}
-    </>
+    </Box>
   );
 }

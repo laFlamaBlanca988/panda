@@ -17,13 +17,14 @@ const StyledLabel = styled("label", {
     alignItems: "center",
     cursor: "pointer",
     color: "gray.700",
+    fontWeight: "medium",
   },
 });
 
 const StyledCheckbox = styled("input", {
   base: {
-    w: 4,
-    h: 4,
+    w: 6,
+    h: 6,
     rounded: "sm",
     border: "1px solid token(colors.inputBorder)",
     cursor: "pointer",
@@ -81,7 +82,6 @@ export function CheckboxField({
             color: "var(--colors-error-500)",
             fontSize: "14px",
             marginTop: "4px",
-            marginLeft: "24px",
           }}
         >
           {error}

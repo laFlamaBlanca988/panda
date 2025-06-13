@@ -1,4 +1,3 @@
-// src/store/formStore.ts
 import { create } from "zustand";
 import { nanoid } from "nanoid";
 import { persist } from "zustand/middleware";
@@ -28,6 +27,10 @@ interface FormStore {
   redo: () => void;
   importFields: (json: FormField[]) => void;
   exportFields: () => string;
+  reset: () => void;
+  persist?: {
+    clearStorage?: () => void;
+  };
 }
 
 export const useFormStore = create<FormStore>()(
@@ -145,7 +148,18 @@ export const useFormStore = create<FormStore>()(
           set({ fields: history[newIndex], historyIndex: newIndex });
         }
       },
+      reset: async () => {
+        set(() => ({
+          fields: [],
+          history: [],
+          historyIndex: -1,
+        }));
 
+        const state = useFormStore.getState();
+        if (state.persist?.clearStorage) {
+          state.persist.clearStorage();
+        }
+      },
       importFields: (json) => {
         set({ fields: json });
         pushToHistory(json);

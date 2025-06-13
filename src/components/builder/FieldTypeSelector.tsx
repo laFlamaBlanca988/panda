@@ -98,7 +98,7 @@ export function FieldTypeSelector() {
           <IconWrapper>
             <FiList size={24} />
           </IconWrapper>
-          Dropdown
+          Select
         </TypeCard>
       </TypesGrid>
     </TypeSelectorContainer>

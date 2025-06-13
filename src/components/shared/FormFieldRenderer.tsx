@@ -1,6 +1,5 @@
 import { useFormStore } from "@/store/formStore";
 import type { FormField } from "@/types/form";
-import { VStack } from "../../../styled-system/jsx";
 import { TextField } from "../ui/TextField";
 import { CheckboxField } from "../ui/CheckboxField";
 import { SelectField } from "../ui/SelectField";
@@ -24,7 +23,7 @@ export const FormFieldRenderer = ({ field, errors, validateField }: Props) => {
   };
 
   return (
-    <VStack alignItems="start" gap="1">
+    <>
       {field.type === "text" && (
         <TextField
           id={field.id}
@@ -58,6 +57,6 @@ export const FormFieldRenderer = ({ field, errors, validateField }: Props) => {
           error={errors[field.id] ? "This field is required" : undefined}
         />
       )}
-    </VStack>
+    </>
   );
 };

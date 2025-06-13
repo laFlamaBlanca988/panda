@@ -3,7 +3,6 @@ import { useFormStore } from "@/store/formStore";
 import { FormFieldRenderer } from "@/components/shared/FormFieldRenderer";
 import Button from "../ui/Button";
 import { styled } from "styled-system/jsx";
-import { motion, AnimatePresence } from "framer-motion";
 import { Heading } from "@/components/ui/Heading";
 import { FiCheck, FiAlertCircle } from "react-icons/fi";
 
@@ -30,7 +29,13 @@ const FieldContainer = styled("div", {
     // marginBottom: "20px",
   },
 });
-
+const StyledDiv = styled("div", {
+  base: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+  },
+});
 const SubmitContainer = styled("div", {
   base: {
     marginTop: "32px",
@@ -39,7 +44,7 @@ const SubmitContainer = styled("div", {
   },
 });
 
-const SuccessMessage = styled(motion.div, {
+const SuccessMessage = styled("div", {
   base: {
     display: "flex",
     alignItems: "center",
@@ -53,7 +58,7 @@ const SuccessMessage = styled(motion.div, {
   },
 });
 
-const ErrorMessage = styled(motion.div, {
+const ErrorMessage = styled("div", {
   base: {
     display: "flex",
     alignItems: "center",
@@ -83,8 +88,10 @@ export const LivePreviewView = () => {
       const newErrors = { ...prev };
       if (required && !value) {
         newErrors[id] = true;
+        setHasErrors(true);
       } else {
         delete newErrors[id];
+        setHasErrors(false);
       }
       return newErrors;
     });
@@ -115,17 +122,13 @@ export const LivePreviewView = () => {
   return (
     <PreviewContainer>
       {fields.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
+        <div>
           <ErrorMessage>
             <FiAlertCircle size={20} />
             No form fields have been added yet. Add some fields in the builder
             tab.
           </ErrorMessage>
-        </motion.div>
+        </div>
       ) : (
         <form onSubmit={handleSubmit}>
           <FormTitle>
@@ -137,56 +140,35 @@ export const LivePreviewView = () => {
             </Heading>
           </FormTitle>
 
-          <motion.div layout>
+          <StyledDiv>
             {fields.map((field) => (
               <FieldContainer key={field.id}>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  layout
-                >
-                  <FormFieldRenderer
-                    field={field}
-                    errors={errors}
-                    validateField={validateField}
-                  />
-                </motion.div>
+                <FormFieldRenderer
+                  field={field}
+                  errors={errors}
+                  validateField={validateField}
+                />
               </FieldContainer>
             ))}
             <SubmitContainer>
               <Button>Submit Form</Button>
             </SubmitContainer>
-          </motion.div>
-          <AnimatePresence>
-            {isSubmitted && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <SuccessMessage>
-                  <FiCheck size={20} />
-                  Form submitted successfully!
-                </SuccessMessage>
-              </motion.div>
-            )}
+          </StyledDiv>
+          {isSubmitted && (
+            <div>
+              <SuccessMessage>
+                <FiCheck size={20} />
+                Form submitted successfully!
+              </SuccessMessage>
+            </div>
+          )}
 
-            {hasErrors && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ErrorMessage>
-                  <FiAlertCircle size={20} />
-                  Please fix the errors highlighted above.
-                </ErrorMessage>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {hasErrors && (
+            <ErrorMessage>
+              <FiAlertCircle size={20} />
+              Please fix the errors highlighted above.
+            </ErrorMessage>
+          )}
         </form>
       )}
     </PreviewContainer>

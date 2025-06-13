@@ -135,7 +135,7 @@ export function SortableField({ field, onEdit, onDelete }: SortableFieldProps) {
       style={style}
       selected={isSelected}
       dragging={isDragging}
-      onClick={onEdit} // Make the entire card clickable for better UX
+      onClick={onEdit}
     >
       <DragHandle {...attributes} {...listeners}>
         <FaGripVertical size={20} />
