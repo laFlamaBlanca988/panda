@@ -4,6 +4,7 @@ import { VStack } from "../../../styled-system/jsx";
 import { TextField } from "../ui/TextField";
 import { CheckboxField } from "../ui/CheckboxField";
 import { SelectField } from "../ui/SelectField";
+import TextSpan from "../ui/TextSpan";
 
 interface Props {
   field: FormField;
@@ -19,11 +20,6 @@ export const FormFieldRenderer = ({ field, errors }: Props) => {
 
   return (
     <VStack alignItems="start" gap="1">
-      <label htmlFor={field.id}>
-        {field.label}
-        {field.required && <span>*</span>}
-      </label>
-
       {field.type === "text" && (
         <TextField
           id={field.id}
@@ -57,7 +53,9 @@ export const FormFieldRenderer = ({ field, errors }: Props) => {
         />
       )}
 
-      {errors[field.id] && <span>This field is required</span>}
+      {errors[field.id] && (
+        <TextSpan color="error">This field is required</TextSpan>
+      )}
     </VStack>
   );
 };

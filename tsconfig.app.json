@@ -8,8 +8,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@/styled-system/*": ["styled-system/*"]
+      "@/*": ["src/*"]
     },
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,

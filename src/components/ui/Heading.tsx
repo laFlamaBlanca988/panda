@@ -146,7 +146,6 @@ interface BaseHeadingProps {
   className?: string;
 }
 
-// Heading component that renders the appropriate element based on level
 export function Heading({
   level = "h1",
   children,

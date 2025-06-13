@@ -120,7 +120,9 @@ export const LivePreviewView = () => {
             <Heading level="h2" size="xl">
               Form Preview
             </Heading>
-            <p>Test your form below</p>
+            <Heading level="h1" size="sm">
+              Test your form below
+            </Heading>
           </FormTitle>
 
           <motion.div layout>
